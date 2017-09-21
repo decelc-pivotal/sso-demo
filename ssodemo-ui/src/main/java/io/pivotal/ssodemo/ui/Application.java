@@ -91,8 +91,32 @@ public class Application {
 		// ssoServiceUrl);
 		// model.addAttribute("ssoServiceUrl", ssoServiceUrl);
 		// model.addAttribute("response", toPrettyJsonString(userInfoResponse));
-
+		model.addAttribute("user", principal.getName());
 		return "index";
+	}
+
+	@RequestMapping("/settings")
+	public String settins(Model model, Principal principal) throws Exception {
+
+		Map<?, ?> userInfoResponse = oauth2RestTemplate.getForObject("{ssoServiceUrl}/userinfo", Map.class,
+				ssoServiceUrl);
+		model.addAttribute("ssoServiceUrl", ssoServiceUrl);
+		model.addAttribute("response", toPrettyJsonString(userInfoResponse));
+		model.addAttribute("user", principal.getName());
+
+		OAuth2AccessToken accessToken = oauth2RestTemplate.getOAuth2ClientContext().getAccessToken();
+		if (accessToken != null) {
+			// model.addAttribute("access_token",
+			// toPrettyJsonString(parseToken(accessToken.getValue())));
+			// model.addAttribute("id_token",
+			// toPrettyJsonString(parseToken((String)
+			// accessToken.getAdditionalInformation().get("id_token"))));
+			model.addAttribute("access_token", accessToken.getValue());
+			model.addAttribute("id_token", accessToken.getAdditionalInformation());
+
+		}
+
+		return "settings";
 	}
 
 	@RequestMapping("/authorization_code")
@@ -106,6 +130,7 @@ public class Application {
 				ssoServiceUrl);
 		model.addAttribute("ssoServiceUrl", ssoServiceUrl);
 		model.addAttribute("response", toPrettyJsonString(userInfoResponse));
+		model.addAttribute("user", userInfoResponse.get("user_info"));
 
 		OAuth2AccessToken accessToken = oauth2RestTemplate.getOAuth2ClientContext().getAccessToken();
 		if (accessToken != null) {
