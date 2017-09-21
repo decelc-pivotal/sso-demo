@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <div th:include="components/header"></div>
+   
+  <body role="document" style="min-height:100%;">
+	<div th:include="components/nav"></div>
+
+		<main role="main">
+		
+			<div class="row doc-main">
+		    	<div class="container">
+		    	
+			    	<div style="width:93%; display: inline-block; vertical-align: top">	
+						<p>Here's the result of calling /userinfo:</p>
+  						<pre th:text="${response}"></pre>
+  						<p>This is the Access Token that was used:</p>
+  						<pre th:text="${access_token}"></pre>
+  						<p>This is the ID Token:</p>
+  						<pre th:text="${id_token}"></pre>
+					</div>
+				</div>
+			</div>
+		</main>
+
+	<div th:include="components/footer"></div>
+
+</body></html>
