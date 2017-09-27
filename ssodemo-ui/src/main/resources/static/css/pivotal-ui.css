@@ -1,3 +1,7 @@
+.navbar-left {
+	float: left;	
+}
+
 @font-face {
   font-family: 'FontAwesome';
   src: url('font-awesome/fontawesome-webfont.eot?v=4.4.0');

@@ -83,7 +83,7 @@ public class Application {
 	}
 
 	@RequestMapping("/")
-	public String index(Model model, Principal principal) {
+	public String index(Model model, Principal principal) throws Exception {
 
 		// Map<?, ?> userInfoResponse =
 		// oauth2RestTemplate.getForObject("{ssoServiceUrl}/userinfo",
@@ -92,11 +92,30 @@ public class Application {
 		// model.addAttribute("ssoServiceUrl", ssoServiceUrl);
 		// model.addAttribute("response", toPrettyJsonString(userInfoResponse));
 		model.addAttribute("user", principal.getName());
+
+		/*
+		 * OAuth2AccessToken accessToken =
+		 * oauth2RestTemplate.getOAuth2ClientContext().getAccessToken(); if
+		 * (accessToken != null) { model.addAttribute("access_token",
+		 * toPrettyJsonString(parseToken(accessToken.getValue())));
+		 * model.addAttribute("id_token", toPrettyJsonString(parseToken((String)
+		 * accessToken.getAdditionalInformation().get("id_token"))));
+		 * 
+		 * }
+		 */
+		// model.addAttribute("user", principal.getName());
+
 		return "index";
 	}
 
+	@RequestMapping("/inventory")
+	public String inventory(Model model, Principal principal) throws Exception {
+		model.addAttribute("user", principal.getName());
+		return "inventory";
+	}
+
 	@RequestMapping("/settings")
-	public String settins(Model model, Principal principal) throws Exception {
+	public String settings(Model model, Principal principal) throws Exception {
 
 		Map<?, ?> userInfoResponse = oauth2RestTemplate.getForObject("{ssoServiceUrl}/userinfo", Map.class,
 				ssoServiceUrl);
@@ -106,14 +125,10 @@ public class Application {
 
 		OAuth2AccessToken accessToken = oauth2RestTemplate.getOAuth2ClientContext().getAccessToken();
 		if (accessToken != null) {
-			// model.addAttribute("access_token",
-			// toPrettyJsonString(parseToken(accessToken.getValue())));
+			model.addAttribute("access_token", toPrettyJsonString(parseToken(accessToken.getValue())));
 			// model.addAttribute("id_token",
 			// toPrettyJsonString(parseToken((String)
 			// accessToken.getAdditionalInformation().get("id_token"))));
-			model.addAttribute("access_token", accessToken.getValue());
-			model.addAttribute("id_token", accessToken.getAdditionalInformation());
-
 		}
 
 		return "settings";
@@ -129,8 +144,8 @@ public class Application {
 		Map<?, ?> userInfoResponse = oauth2RestTemplate.getForObject("{ssoServiceUrl}/userinfo", Map.class,
 				ssoServiceUrl);
 		model.addAttribute("ssoServiceUrl", ssoServiceUrl);
-		model.addAttribute("response", toPrettyJsonString(userInfoResponse));
 		model.addAttribute("user", userInfoResponse.get("user_info"));
+		model.addAttribute("response", toPrettyJsonString(userInfoResponse));
 
 		OAuth2AccessToken accessToken = oauth2RestTemplate.getOAuth2ClientContext().getAccessToken();
 		if (accessToken != null) {
